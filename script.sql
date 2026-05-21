@@ -50,16 +50,22 @@ CREATE TABLE cliente (
     cedula VARCHAR(20) NOT NULL PRIMARY KEY,
     cantidad_compras INT DEFAULT 0,
     CONSTRAINT fk_cliente_persona
-        FOREIGN KEY (cedula) REFERENCES persona(cedula)
+        FOREIGN KEY (cedula)
+        REFERENCES persona(cedula)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE vendedor (
     cedula VARCHAR(20) NOT NULL PRIMARY KEY,
     registro_empresa_nit VARCHAR(20) NOT NULL,
     CONSTRAINT fk_vendedor_persona
-        FOREIGN KEY (cedula) REFERENCES persona(cedula),
+        FOREIGN KEY (cedula)
+        REFERENCES persona(cedula)
+        ON DELETE CASCADE,
+
     CONSTRAINT fk_vendedor_registro_empresa
-        FOREIGN KEY (registro_empresa_nit) REFERENCES registro_empresa(nit)
+        FOREIGN KEY (registro_empresa_nit)
+        REFERENCES registro_empresa(nit)
 );
 
 CREATE TABLE usuario (
@@ -67,8 +73,12 @@ CREATE TABLE usuario (
     contrasena VARCHAR(100) NOT NULL,
     cedula VARCHAR(20) NOT NULL,
     tipo VARCHAR(20) NOT NULL,
+
     CONSTRAINT fk_usuario_persona 
-        FOREIGN KEY (cedula) REFERENCES persona(cedula),
+        FOREIGN KEY (cedula)
+        REFERENCES persona(cedula)
+        ON DELETE CASCADE,
+
     CONSTRAINT chk_usuario_tipo
         CHECK (tipo IN ('admin', 'vendedor', 'cliente'))
 );

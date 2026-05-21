@@ -72,8 +72,13 @@ export const eliminarPersona = async (cedula) => {
   let conexion
   try {
     conexion = await pool.getConnection()
-    const resultado = await conexion.query(ELIMINAR_PERSONA, cedula)
+
+    console.log(cedula)
+    const resultado = await conexion.query(ELIMINAR_PERSONA, [cedula])
+    console.log(resultado)
+
     if (resultado.affectedRows === 0) throw new Error('La persona no fue encontrada')
+
     return { mensaje: 'Persona eliminada correctamente' }
   } catch (error) {
     throw new Error('Error eliminando la persona: ' + error.message)

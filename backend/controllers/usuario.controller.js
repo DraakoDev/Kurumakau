@@ -1,4 +1,4 @@
-import { cambiarContrasena, checkLogin, crearUsuario, eliminarUsuario, getPersonInDB, getUserInDB, listarUsuarios } from '../model/usuario.model.js'
+import { cambiarContrasena, checkLogin, crearUsuario, eliminarUsuario, actualizarUsuario as actualizarUsuarioModel, getPersonInDB, getUserInDB, listarUsuarios } from '../model/usuario.model.js'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { transporter } from '../services/mail/mailer.js'
@@ -250,12 +250,29 @@ Conduce hacia el futuro 🚘
 
 export const borrarUsuario = (req, res) => {
   const { username } = req.params
+
   try {
     const data = eliminarUsuario(username)
     console.log(data)
     res.send({ message: 'El usuario fue eliminado correctamente' })
   } catch (error) {
     res.send({ message: 'No se pudo eliminar el usuaior', error: error.message })
+  }
+}
+
+export const actualizarUsuario = async (req, res) => {
+  const { username } = req.params
+  const { tipo } = req.body
+
+  if (!tipo) {
+    return res.status(400).send({ success: false, error: 'El tipo de usuario es requerido' })
+  }
+
+  try {
+    await actualizarUsuarioModel(username, tipo)
+    res.status(200).send({ success: true, mensaje: 'Usuario actualizado correctamente' })
+  } catch (error) {
+    res.status(400).send({ success: false, error: error.message })
   }
 }
 

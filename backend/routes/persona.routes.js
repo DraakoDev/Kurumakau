@@ -9,6 +9,6 @@ router.get('/personas', checkToken, getAllPersonas)
 router.get('/personas/vendedores/list', getVendedores)
 router.get('/personas/:cedula', checkToken, getPersona)
 router.put('/personas/:cedula', checkToken, updatePersona)
-router.delete('/personas/:cedula', checkToken, deletePersona)
+router.delete('/personas/:cedula', deletePersona)
 
 export default router

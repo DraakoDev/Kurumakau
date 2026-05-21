@@ -6,7 +6,6 @@ export const checkToken = (req, res, next) => {
   try {
     const data = jwt.verify(token, process.env.SECRET_JWT_KEY)
     req.session.user = data
-    console.log(data)
   } catch {}
   next()
 }

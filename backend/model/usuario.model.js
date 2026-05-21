@@ -1,6 +1,6 @@
 import { pool } from '../db/conexion.js'
 import { BUSCAR_PERSONA, INSERTAR_PERSONA } from '../db/queries/persona.queries.js'
-import { ELIMINAR_USUARIO, INSERTAR_USUARIO, REPASSWORD, SELECCIONAR_USUARIO, LISTAR_USUARIOS } from '../db/queries/user.queries.js'
+import { ELIMINAR_USUARIO, INSERTAR_USUARIO, REPASSWORD, SELECCIONAR_USUARIO, LISTAR_USUARIOS, EDITAR_USUARIO } from '../db/queries/user.queries.js'
 import bcrypt from 'bcrypt'
 
 export const getUserInDB = async (user) => {
@@ -102,6 +102,18 @@ export const crearUsuario = async (persona) => {
   }
 }
 
+export const actualizarUsuario = async (username, tipo) => {
+  let conexion
+  try {
+    conexion = await pool.getConnection()
+    const data = await conexion.query(EDITAR_USUARIO, [tipo, username])
+    if (data.affectedRows === 0) throw new Error('El usuario no fue encontrado')
+    return data
+  } catch (error) {
+    throw new Error('Error actualizando el usuario: ' + error.message)
+  }
+}
+
 export const eliminarUsuario = async (username) => {
   let conexion
   try {
@@ -111,6 +123,10 @@ export const eliminarUsuario = async (username) => {
   } catch (error) {
     throw new Error('Error eliminando el usuario' + error.message)
   }
+}
+
+export const eliminarUsuarioPorCedula = async (conexion, cedula) => {
+  return await conexion.query(ELIMINAR_USUARIO_POR_CEDULA, cedula)
 }
 
 export const listarUsuarios = async () => {
